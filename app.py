@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import torch
+import os
 from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
 
 app = Flask(__name__)
@@ -36,5 +37,11 @@ def predict():
     result = predict_text(data["text"])
     return jsonify({"prediction": result})
 
+@app.route('/')
+def home():
+    return "Hello! Go to /predict to POST your text."
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5002, debug=True)
+    port = int(os.environ.get('PORT', 5000))  # read from environment or default to 5000
+    app.run(host='0.0.0.0', port=port, debug=True)
