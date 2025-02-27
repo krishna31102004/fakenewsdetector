@@ -1,3 +1,5 @@
 Flask
 torch
 transformers
+huggingface_hub
+gunicorn
