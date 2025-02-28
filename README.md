@@ -125,6 +125,9 @@ Expected output:
 - **`POST /predict`**  
   Accepts JSON with a `"text"` field, returns `{"prediction": "Fake News"}` or `{"prediction": "Real News"}`.
 
+- **`GET /health`**  
+  Returns a simple health check JSON: `{"status": "OK"}`.
+
 ## Results
 
 Preliminary evaluation shows high accuracy and F1 scores. Error analysis suggests the model handles a variety of political and general news articles well.
