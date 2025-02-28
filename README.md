@@ -1,7 +1,14 @@
-Below is a professionally formatted README.md for your project. You can copy this into your README.md file:
+Below is a revised **README.md** snippet that:
+
+1. **Removes the License** section (since you don’t have one yet).  
+2. **Makes the Future Improvements** section more natural-sounding.  
+3. **Includes your Render link** under Usage.
+
+Feel free to adjust any wording or add more details as you see fit.
 
 ---
 
+```markdown
 # Fake News Detector
 
 A state-of-the-art fake news detection API built with Flask and DistilBERT. This project uses a fine-tuned DistilBERT model to classify news articles as "Fake News" or "Real News". The model is hosted on Hugging Face, and the Flask API is deployed on Render.
@@ -14,16 +21,15 @@ A state-of-the-art fake news detection API built with Flask and DistilBERT. This
 - [Installation](#installation)
 - [Usage](#usage)
   - [Local Testing](#local-testing)
+  - [Deployed Service](#deployed-service)
   - [API Endpoints](#api-endpoints)
-- [Deployment](#deployment)
 - [Results](#results)
 - [Future Improvements](#future-improvements)
-- [License](#license)
 - [Contact](#contact)
 
 ## Overview
 
-This project addresses the problem of detecting fake news using Natural Language Processing (NLP) techniques. It fine-tunes a pre-trained DistilBERT model on a dataset of fake and real news articles. The API exposes a `/predict` endpoint, which accepts a POST request with a news article and returns a prediction: `"Fake News"` or `"Real News"`.
+This project addresses the challenge of detecting fake news using modern NLP techniques. It fine-tunes a pre-trained DistilBERT model on a dataset of fake and real news articles. The resulting model is accessible via a REST API built with Flask.
 
 ## Features
 
@@ -39,7 +45,7 @@ This project addresses the problem of detecting fake news using Natural Language
 - **Flask** – Web framework for building the API
 - **Transformers** – Hugging Face library for DistilBERT
 - **Torch** – For model inference
-- **Git & Git LFS** – For version control and handling large model files
+- **Git** – For version control
 - **Render** – Cloud hosting platform
 - **Hugging Face Hub** – Hosting the model files
 
@@ -49,49 +55,45 @@ This project addresses the problem of detecting fake news using Natural Language
 
 - Python 3.x installed
 - Git installed
-- Git LFS installed for handling large files (model files >100 MB)
-- [Hugging Face account](https://huggingface.co/) for hosting the model
+- A [Hugging Face account](https://huggingface.co/) for hosting the model (already set up)
+- A [Render account](https://render.com/) if you want to deploy the service publicly
 
 ### Setup Locally
 
-1. **Clone the GitHub repository:**
+1. **Clone the repository:**
 
    ```bash
    git clone https://github.com/krishna31102004/fakenewsdetector.git
    cd fakenewsdetector
    ```
 
-2. **Install required Python packages:**
+2. **Install dependencies:**
 
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Set up your environment (if needed):**
-
-   Ensure your `app.py` is configured to load the model from Hugging Face:
+3. **Update `app.py`** if needed to reference your Hugging Face model:
 
    ```python
-   model_path = "kb4086/fakenewsdetector"  # Hugging Face repository ID
+   model_path = "kb4086/fakenewsdetector"  # Hugging Face repo ID
    tokenizer = DistilBertTokenizer.from_pretrained(model_path)
    model = DistilBertForSequenceClassification.from_pretrained(model_path)
+   model.eval()
    ```
 
 ## Usage
 
 ### Local Testing
 
-To run the API locally:
-
-1. **Run the Flask application:**
+1. **Run the Flask app:**
 
    ```bash
    python app.py
    ```
+   By default, it listens on `0.0.0.0` at a port specified by `PORT` (or 5000 if not set).
 
-   The API will start and listen on the port defined by the `PORT` environment variable (default is 5000 if not set).
-
-2. **Test the `/predict` endpoint using curl:**
+2. **Send a POST request to `/predict`:**
 
    ```bash
    curl -X POST http://localhost:5000/predict \
@@ -99,75 +101,57 @@ To run the API locally:
      -d '{"text": "Breaking news: The President just announced new policies."}'
    ```
 
-   Expected output:
+   You should get a JSON response:
 
    ```json
    {"prediction": "Fake News"}
    ```
 
+### Deployed Service
+
+The project is **live** at [Render](https://render.com/).  
+You can access the public API here:
+```
+https://fakenewsdetector-pg8i.onrender.com
+```
+- **Root Route** (`GET /`): Shows a simple welcome message.
+- **`POST /predict`**: Accepts a JSON payload with `"text"` and returns a prediction.
+
+**Example**:
+```bash
+curl -X POST https://fakenewsdetector-pg8i.onrender.com/predict \
+  -H "Content-Type: application/json" \
+  -d '{"text": "The President just announced new policies."}'
+```
+Expected output:
+```json
+{"prediction":"Fake News"}
+```
+
 ### API Endpoints
 
 - **`GET /`**  
-  Returns a simple welcome message.
+  Returns a brief welcome message.
 
 - **`POST /predict`**  
-  Accepts a JSON payload with a `"text"` field and returns a prediction.
-
-  **Request Example:**
-
-  ```json
-  {
-    "text": "Your news article text here."
-  }
-  ```
-
-  **Response Example:**
-
-  ```json
-  {
-    "prediction": "Fake News"
-  }
-  ```
-
-## Deployment
-
-This project is deployed on Render. The Flask app is built using Gunicorn and is configured to bind to the port provided by the Render environment variable.
-
-### Steps for Deployment on Render
-
-1. **Push your code** (without the large model files) to your GitHub repo: `github.com/krishna31102004/fakenewsdetector`.
-
-2. **Connect your GitHub repo** to Render and configure your Web Service:
-   - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `gunicorn app:app`
-   - **Root Directory:** (Leave blank if your code is in the root of the repo)
-
-3. **Deploy** your service. Your live URL will be something like:
-   ```
-   https://fakenewsdetector-pg8i.onrender.com/
-   ```
-4. **Test the API** via curl or Postman as described in the Usage section.
+  Accepts JSON with a `"text"` field, returns `{"prediction": "Fake News"}` or `{"prediction": "Real News"}`.
 
 ## Results
 
-The model achieved very high accuracy and F1 scores on the validation and test sets. Detailed evaluation results can be found in the logs. Misclassified examples were analyzed to further improve the model.
+Preliminary evaluation shows high accuracy and F1 scores. Error analysis suggests the model handles a variety of political and general news articles well.
 
 ## Future Improvements
 
-- **Enhanced Error Analysis:** Use interpretability tools like LIME or SHAP.
-- **Hyperparameter Tuning:** Experiment with learning rates, batch sizes, and epochs.
-- **Data Augmentation:** Incorporate more diverse datasets to improve model generalization.
-- **Additional API Endpoints:** Add batch prediction and a web UI using Streamlit or Gradio.
-- **Monitoring & Logging:** Integrate more robust monitoring for production deployments.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+- **Better Explainability**: Integrate tools like LIME or SHAP to see which words influence predictions.
+- **Hyperparameter Exploration**: Experiment with different learning rates, batch sizes, and epochs to see if performance can improve.
+- **Data Augmentation**: Include more diverse or domain-specific datasets for broader coverage.
+- **UI Enhancements**: Create a small web interface using Streamlit or Gradio for a more user-friendly demo.
+- **Monitoring & Logging**: Add advanced logging or analytics to track usage and model performance in production.
 
 ## Contact
 
-- **Your Name:** Krishna
-- **GitHub:** [krishna31102004](https://github.com/krishna31102004)
-- **Hugging Face:** [kb4086](https://huggingface.co/kb4086)
+- **Name**: Krishna
+- **GitHub**: [krishna31102004](https://github.com/krishna31102004)
+- **Hugging Face**: [kb4086](https://huggingface.co/kb4086)
+- **Email**: *kbalaji6@asu.edu*
 
----
