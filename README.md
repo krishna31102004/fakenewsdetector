@@ -139,7 +139,7 @@ Preliminary evaluation shows high accuracy and F1 scores. Error analysis suggest
 
 ## Contact
 
-- **Name**: Krishna
+- **Name**: Krishna Balaji
 - **GitHub**: [krishna31102004](https://github.com/krishna31102004)
 - **Hugging Face**: [kb4086](https://huggingface.co/kb4086)
 - **Email**: *kbalaji6@asu.edu*
