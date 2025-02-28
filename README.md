@@ -1,14 +1,3 @@
-Below is a revised **README.md** snippet that:
-
-1. **Removes the License** section (since you don’t have one yet).  
-2. **Makes the Future Improvements** section more natural-sounding.  
-3. **Includes your Render link** under Usage.
-
-Feel free to adjust any wording or add more details as you see fit.
-
----
-
-```markdown
 # Fake News Detector
 
 A state-of-the-art fake news detection API built with Flask and DistilBERT. This project uses a fine-tuned DistilBERT model to classify news articles as "Fake News" or "Real News". The model is hosted on Hugging Face, and the Flask API is deployed on Render.
