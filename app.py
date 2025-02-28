@@ -43,7 +43,24 @@ def predict_text(text):
         logging.error("Prediction error: %s", e)
         return "Error during prediction"
 
-# Root route: shows an HTML form for in-browser classification
+# Enhanced HTML template components (Navigation Bar and Footer)
+NAVBAR = """
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">Fake News Detector</a>
+  </div>
+</nav>
+"""
+
+FOOTER = """
+<footer class="footer mt-5 py-3 bg-light">
+  <div class="container text-center">
+    <span class="text-muted">© 2025 Krishna Balaji | <a href="https://github.com/krishna31102004/fakenewsdetector" target="_blank">GitHub Repo</a></span>
+  </div>
+</footer>
+"""
+
+# Root route: shows an HTML form for in-browser classification with enhanced UI
 @app.route('/', methods=['GET', 'POST'])
 def classify_in_browser():
     if request.method == 'POST':
@@ -55,13 +72,21 @@ def classify_in_browser():
                 <head>
                     <title>Fake News Detector - Error</title>
                     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+                    <style>
+                        body { padding-top: 70px; }
+                        .container { max-width: 700px; }
+                    </style>
                 </head>
                 <body>
+                    ''' + NAVBAR + '''
                     <div class="container mt-5">
-                        <h1>Error</h1>
-                        <p>Please enter some text to classify.</p>
+                        <div class="alert alert-danger" role="alert">
+                            Please enter some text to classify.
+                        </div>
                         <a href="/" class="btn btn-primary">Go Back</a>
                     </div>
+                    ''' + FOOTER + '''
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
                 </body>
                 </html>
             ''')
@@ -73,52 +98,67 @@ def classify_in_browser():
                 <title>Fake News Detector - Result</title>
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
                 <style>
-                    body { padding-top: 50px; }
+                    body { padding-top: 70px; }
                     .container { max-width: 700px; }
                 </style>
             </head>
             <body>
-                <div class="container">
-                    <h1>Fake News Detector - Result</h1>
-                    <div class="mb-3">
-                        <label class="form-label"><strong>Input:</strong></label>
-                        <div class="alert alert-secondary">{{ user_text }}</div>
+                ''' + NAVBAR + '''
+                <div class="container mt-5">
+                    <div class="card">
+                        <div class="card-header">
+                            Fake News Detector - Result
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Your Input:</h5>
+                            <p class="card-text">{{ user_text }}</p>
+                            <h5 class="card-title">Prediction:</h5>
+                            <p class="card-text"><span class="badge bg-info text-dark">{{ prediction }}</span></p>
+                            <a href="/" class="btn btn-primary">Try Another</a>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label"><strong>Prediction:</strong></label>
-                        <div class="alert alert-info">{{ prediction }}</div>
-                    </div>
-                    <a href="/" class="btn btn-primary">Try Another</a>
                 </div>
+                ''' + FOOTER + '''
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
             </body>
             </html>
         ''', user_text=user_text, prediction=result)
     else:
-        # GET: Show the form
+        # GET: Show the form with enhanced styling
         return render_template_string('''
             <!DOCTYPE html>
-            <html>
+            <html lang="en">
             <head>
+                <meta charset="UTF-8">
                 <title>Fake News Detector</title>
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
                 <style>
-                    body { padding-top: 50px; }
+                    body { padding-top: 70px; }
                     .container { max-width: 700px; }
                 </style>
             </head>
             <body>
+                ''' + NAVBAR + '''
                 <div class="container">
-                    <h1 class="mb-4">Fake News Detector</h1>
-                    <form method="POST">
-                        <div class="mb-3">
-                            <label for="text" class="form-label">Enter News Article Text:</label>
-                            <textarea class="form-control" id="text" name="text" rows="8" placeholder="Type or paste your news article here..."></textarea>
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            Enter News Article Text
                         </div>
-                        <button type="submit" class="btn btn-primary">Classify</button>
-                    </form>
-                    <hr>
-                    <p>You can also use the API directly by sending a POST request to <code>/predict</code>.</p>
+                        <div class="card-body">
+                            <form method="POST">
+                                <div class="mb-3">
+                                    <textarea class="form-control" name="text" rows="8" placeholder="Type or paste your news article here..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Classify</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p>You can also use the API directly by sending a POST request to <code>/predict</code>.</p>
+                    </div>
                 </div>
+                ''' + FOOTER + '''
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
             </body>
             </html>
         ''')
