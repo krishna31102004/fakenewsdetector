@@ -103,8 +103,16 @@ You can access the public API here:
 ```
 https://fakenewsdetector-pg8i.onrender.com
 ```
-- **Root Route** (`GET /`): Shows a simple welcome message.
-- **`POST /predict`**: Accepts a JSON payload with `"text"` and returns a prediction.
+### API Endpoints
+
+- **`GET /`**  
+  Returns a brief welcome message.
+
+- **`POST /predict`**  
+  Accepts JSON with a `"text"` field, returns `{"prediction": "Fake News"}` or `{"prediction": "Real News"}`.
+
+- **`GET /health`**  
+  Returns a simple health check JSON: `{"status": "OK"}`.
 
 **Example**:
 ```bash
@@ -116,17 +124,6 @@ Expected output:
 ```json
 {"prediction":"Fake News"}
 ```
-
-### API Endpoints
-
-- **`GET /`**  
-  Returns a brief welcome message.
-
-- **`POST /predict`**  
-  Accepts JSON with a `"text"` field, returns `{"prediction": "Fake News"}` or `{"prediction": "Real News"}`.
-
-- **`GET /health`**  
-  Returns a simple health check JSON: `{"status": "OK"}`.
 
 ## Results
 
